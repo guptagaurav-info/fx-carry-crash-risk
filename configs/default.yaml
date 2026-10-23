@@ -1,0 +1,50 @@
+# Every rule and assumption below was fixed before results were examined.
+raw_dir: data/raw
+out_dir: reports
+publication_date: "2026-10-23"
+
+# Six currency trusts that hold foreign-currency bank deposits and pass the interest through
+# as monthly distributions. Total return = spot move vs USD + deposit interest - fund fee.
+currencies:
+  FXA: AUD
+  FXB: GBP
+  FXC: CAD
+  FXE: EUR
+  FXF: CHF
+  FXY: JPY
+fx_cross_check:          # Yahoo quotes are foreign currency per US dollar ("AUD=X" = AUD per USD)
+  FXA: AUD=X
+  FXB: GBP=X
+  FXC: CAD=X
+  FXE: EUR=X
+  FXF: CHF=X
+  FXY: JPY=X
+start: "2007-03-30"      # first month-end with all six trusts trading (FXY listed Feb 2007)
+carry_lookback_days: 91  # carry signal = last ~3 months of distributions x 4 / price
+momentum_months: 12      # 12-1 momentum (skip the latest month)
+k: 2                     # long the top 2, short the bottom 2, equal weight, dollar neutral
+min_spread: 0.01         # carry rule B: trade only when top-minus-bottom yield spread >= 1 point
+vol_target: 0.08         # carry rule C: scale to 8% annualised vol using trailing 63 trading days
+vol_window: 63
+max_leverage: 2.0
+cost_per_turnover: 0.0010   # illustrative 10 bp per unit of turnover
+eras:
+  - ["2007-04-01", "2011-12-31", "Crisis and normal rates"]
+  - ["2012-01-01", "2021-12-31", "Zero-rate decade"]
+  - ["2022-01-01", "2026-12-31", "Rates back"]
+
+# Illustrative committee sizing
+nav_usd: 1000000000
+alloc_vol_budget: 0.01      # give the strategy 1% of NAV in annualised volatility
+
+sources:
+  prices.parquet:
+    url: https://huggingface.co/datasets/defeatbeta/yahoo-finance-data/resolve/main/data/US/stock_prices.parquet
+    sha256: 903dbb965979f8b92a60b01524372f42be0e4bf88c291caf87171a286149be32
+  stock_dividend_events.parquet:
+    url: https://huggingface.co/datasets/defeatbeta/yahoo-finance-data/resolve/main/data/US/stock_dividend_events.parquet
+    sha256: 08d2a37482501c79c108dd4fefe5f1cd8d64b19ef3d3a316753597c0ddd4ece8
+  exchange_rate.parquet:
+    url: https://huggingface.co/datasets/defeatbeta/yahoo-finance-data/resolve/main/data/US/exchange_rate.parquet
+    sha256: e2eb449547e1f63538b59bcf08967a23fe495fbffcd3dcfbe55d2a1c37fa0fe6
+# Downloaded 2026-10-20 (prices, dividends) and 2026-10-23 (exchange rates); ingest.py stops if a file changes.
