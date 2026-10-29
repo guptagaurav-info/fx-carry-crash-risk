@@ -61,7 +61,7 @@ Methods referenced
 - Menkhoff, L., Sarno, L., Schmeling, M. and Schrimpf, A. (2012). "Carry Trades and Global Foreign Exchange Volatility." *The Journal of Finance* 67(2), 681–718.
 - Moreira, A. and Muir, T. (2017). "Volatility-Managed Portfolios." *The Journal of Finance* 72(4), 1611–1644.
 
-All code, charts and text are the author's own.
+Code, analysis, charts and text were produced with AI assistance (Claude, by Anthropic) and reviewed by Gaurav Gupta.
 
 ## Run it
 
